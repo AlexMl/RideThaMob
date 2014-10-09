@@ -1,4 +1,4 @@
-package de.MiniDigger.RideThaMob;
+package me.Aubli.RideMobs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,26 +18,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.util.Vector;
 
 public class RideThaMobListener implements Listener {
-
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent e) {
-		if (e.getPlayer().hasPermission("ridethamob.update")
-				&& RideThaMob.update) {
-			e.getPlayer().sendMessage(
-					RideThaMob.cprefix + Lang._(LangType.UPDATE_AVAILABLE_1)
-							+ RideThaMob.updater.getLatestName() + "("
-							+ RideThaMob.updater.getLatestType() + ")");
-			e.getPlayer().sendMessage(
-					RideThaMob.cprefix + Lang._(LangType.UPDATE_AVAILABLE_2));
-
-		}
-	}
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {

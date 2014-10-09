@@ -1,17 +1,16 @@
-package de.MiniDigger.RideThaMob;
+package me.Aubli.RideMobs;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Filter;
 import java.util.logging.Logger;
+
+import me.Aubli.RideMobs.Entities.RideAbleEntityType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import de.MiniDigger.RideThaMob.Entity.RideAbleEntityType;
 
 public class RideThaMob extends JavaPlugin {
 	public static String prefix;
@@ -26,7 +25,6 @@ public class RideThaMob extends JavaPlugin {
 	public static ArrayList<String> fly;
 	public static ArrayList<EntityType> entity_blacklist;
 	public static RideThaMob pl;
-	public static Updater updater;
 	public static boolean update;
 	public static File file;
 	public static boolean check_update;
@@ -44,13 +42,7 @@ public class RideThaMob extends JavaPlugin {
 		RideThaMob.cprefix = (ChatColor.AQUA + "[" + ChatColor.RED
 				+ getDescription().getName() + ChatColor.AQUA + "] " + ChatColor.RESET);
 
-		setupMetrics();
-
 		setupEntityBlacklist();
-
-		if (RideThaMob.check_update) {
-			setupUpdater();
-		}
 
 		RideThaMob.speed = new ArrayList<String>();
 		RideThaMob.sneak = new ArrayList<String>();
@@ -104,42 +96,6 @@ public class RideThaMob extends JavaPlugin {
 		new Lang();
 	}
 
-	private void setupUpdater() {
-		file = this.getFile();
-		updater = new Updater(pl, 53240, file, Updater.UpdateType.NO_DOWNLOAD,
-				false);
-
-		Updater.UpdateResult result = updater.getResult();
-		switch (result) {
-		case FAIL_DBO:
-			getLogger().info("Could not reach dev.bukkit.org. It is offline?");
-			update = false;
-			break;
-		case FAIL_NOVERSION:
-			getLogger().info("Failed to look for Updates: FAIL_NOVERSION");
-			update = false;
-			break;
-		case FAIL_APIKEY:
-			getLogger().info("Failed to look for Updates: FAIL_APIKEY");
-			update = false;
-			break;
-		case FAIL_BADID:
-			getLogger().info("Failed to look for Updates: FAIL_BADID");
-			update = false;
-			break;
-		case UPDATE_AVAILABLE:
-			Bukkit.getConsoleSender()
-					.sendMessage(
-							ChatColor.YELLOW
-									+ "[RideThaMob] There is an Update avalible. Type '/ridethamob update' to download it.");
-			update = true;
-			break;
-		default:
-			update = false;
-			break;
-		}
-	}
-
 	private void registerCommands() {
 		getCommand("RideThaMob").setExecutor(new Commands());
 	}
@@ -167,14 +123,5 @@ public class RideThaMob extends JavaPlugin {
 		entity_blacklist.add(EntityType.THROWN_EXP_BOTTLE);
 		entity_blacklist.add(EntityType.WEATHER);
 		entity_blacklist.add(EntityType.WITHER_SKULL);
-	}
-
-	private void setupMetrics() {
-		try {
-			Metrics metrics = new Metrics(pl);
-			metrics.start();
-		} catch (IOException e) {
-			getLogger().warning("Failed to load the Metrics :(");
-		}
 	}
 }

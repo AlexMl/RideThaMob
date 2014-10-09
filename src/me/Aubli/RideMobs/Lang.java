@@ -1,4 +1,4 @@
-package de.MiniDigger.RideThaMob;
+package me.Aubli.RideMobs;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package de.MiniDigger.RideThaMob;
+package me.Aubli.RideMobs;
 
 import org.bukkit.DyeColor;
 import org.bukkit.entity.EntityType;

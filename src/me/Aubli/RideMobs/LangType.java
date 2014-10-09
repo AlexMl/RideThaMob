@@ -1,4 +1,4 @@
-package de.MiniDigger.RideThaMob;
+package me.Aubli.RideMobs;
 
 public enum LangType {
 	SPEEDMODE_ACTIVATED, SPEEDMODE_DEACTIVATED, SPEEDMODE_NO_PERM, //

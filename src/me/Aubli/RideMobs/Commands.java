@@ -1,4 +1,4 @@
-package de.MiniDigger.RideThaMob;
+package me.Aubli.RideMobs;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -80,16 +80,7 @@ public class Commands implements CommandExecutor {
 								p.sendMessage(RideThaMob.cprefix
 										+ Lang._(LangType.NYAN_NO_PERM));
 							}
-						} else // Update COmmand
-						if (args[0].equalsIgnoreCase("update")) {
-							if (p.hasPermission("ridethamob.update")) {
-								doUpdate(sender);
-
-							} else {
-								p.sendMessage(RideThaMob.cprefix
-										+ Lang._(LangType.UPDATER_NO_PERM));
-							}
-						} else // Fly command
+						} else  // Fly command
 						if (args[0].equalsIgnoreCase("fly")) {
 							if (p.hasPermission("ridethamob.fly")) {
 								if (!RideThaMob.fly.contains(p.getName())) {
@@ -130,46 +121,7 @@ public class Commands implements CommandExecutor {
 							+ Lang._(LangType.RIDE_HOP_OFF));
 				}
 			}
-			// version anzeigen
-			else {
-				if (args.length == 1 && args[0].equalsIgnoreCase("update")) {
-					doUpdate(sender);
-				} else {
-					sender.sendMessage(RideThaMob.prefix
-							+ "---------RideThaMob---------");
-
-					sender.sendMessage(RideThaMob.prefix
-							+ "Version "
-							+ RideThaMob.pl.getDescription().getVersion()
-							+ " by "
-							+ (String) RideThaMob.pl.getDescription()
-									.getAuthors().get(0));
-
-					sender.sendMessage(RideThaMob.prefix
-							+ "----------------------------");
-				}
-			}
 		}
 		return true;
-	}
-
-	public void doUpdate(CommandSender s) {
-		if (RideThaMob.update) {
-			RideThaMob.pl.getLogger().info(
-					"Starting Update. This may take a little while!");
-			s.sendMessage(RideThaMob.cprefix + Lang._(LangType.UPDATE_START));
-			Updater updater = new Updater(RideThaMob.pl, 53240,
-					RideThaMob.file, Updater.UpdateType.NO_VERSION_CHECK, true);
-			if (updater.getResult() != Updater.UpdateResult.SUCCESS) {
-				s.sendMessage(RideThaMob.cprefix
-						+ Lang._(LangType.UPDATE_FAILED));
-			} else {
-				s.sendMessage(RideThaMob.cprefix
-						+ Lang._(LangType.UPDATE_SUCCESS));
-			}
-		} else {
-			s.sendMessage(RideThaMob.cprefix
-					+ Lang._(LangType.UPDATE_UP_TO_DATE));
-		}
 	}
 }

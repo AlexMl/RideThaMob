@@ -1,12 +1,12 @@
-package de.MiniDigger.RideThaMob.Entity;
+package me.Aubli.RideMobs.Entities;
 
 import java.lang.reflect.Field;
 
-import net.minecraft.server.v1_7_R3.EntityEnderDragon;
-import net.minecraft.server.v1_7_R3.EntityHuman;
-import net.minecraft.server.v1_7_R3.EntityLiving;
-import net.minecraft.server.v1_7_R3.World;
-import de.MiniDigger.RideThaMob.RideThaMob;
+import me.Aubli.RideMobs.RideThaMob;
+import net.minecraft.server.v1_7_R4.EntityEnderDragon;
+import net.minecraft.server.v1_7_R4.EntityHuman;
+import net.minecraft.server.v1_7_R4.EntityLiving;
+import net.minecraft.server.v1_7_R4.World;
 
 public class RideAbleEnderDragon extends EntityEnderDragon {
 

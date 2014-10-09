@@ -1,4 +1,4 @@
-package de.MiniDigger.RideThaMob;
+package me.Aubli.RideMobs;
 
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
