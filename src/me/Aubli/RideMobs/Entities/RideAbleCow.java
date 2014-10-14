@@ -18,8 +18,7 @@ public class RideAbleCow extends EntityCow {
 	public void e(float sideMot, float forMot) {
 		if (this.passenger == null || !(this.passenger instanceof EntityHuman)) {
 			super.e(sideMot, forMot);
-			this.W = 0.5F; // Make sure the entity can walk over half slabs,
-							// instead of jumping
+			this.W = 0.5F; // Make sure the entity can walk over half slabs, instead of jumping
 			return;
 		}
 		

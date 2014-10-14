@@ -95,8 +95,7 @@ public enum RideAbleEntityType {
 					Field list = BiomeBase.class.getDeclaredField(field);
 					list.setAccessible(true);
 					@SuppressWarnings("unchecked")
-					List<BiomeMeta> mobList = (List<BiomeMeta>) list
-							.get(biomeBase);
+					List<BiomeMeta> mobList = (List<BiomeMeta>) list.get(biomeBase);
 
 					// Write in our custom class.
 					for (BiomeMeta meta : mobList)
@@ -117,15 +116,13 @@ public enum RideAbleEntityType {
 		for (RideAbleEntityType entity : values()) {
 			// Remove our class references.
 			try {
-				((Map) getPrivateStatic(EntityTypes.class, "d")).remove(entity
-						.getCustomClass());
+				((Map) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			try {
-				((Map) getPrivateStatic(EntityTypes.class, "f")).remove(entity
-						.getCustomClass());
+				((Map) getPrivateStatic(EntityTypes.class, "f")).remove(entity.getCustomClass());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -133,8 +130,7 @@ public enum RideAbleEntityType {
 
 		for (RideAbleEntityType entity : values())
 			try {
-				// Unregister each entity by writing the NMS back in place of
-				// the custom class.
+				// Unregister each entity by writing the NMS back in place of the custom class.
 				a(entity.getNMSClass(), entity.getName(), entity.getID());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -158,11 +154,9 @@ public enum RideAbleEntityType {
 					Field list = BiomeBase.class.getDeclaredField(field);
 					list.setAccessible(true);
 					@SuppressWarnings("unchecked")
-					List<BiomeMeta> mobList = (List<BiomeMeta>) list
-							.get(biomeBase);
+					List<BiomeMeta> mobList = (List<BiomeMeta>) list.get(biomeBase);
 
-					// Make sure the NMS class is written back over our custom
-					// class.
+					// Make sure the NMS class is written back over our custom class.
 					for (BiomeMeta meta : mobList)
 						for (RideAbleEntityType entity : values())
 							if (entity.getCustomClass().equals(meta.b))
@@ -185,8 +179,7 @@ public enum RideAbleEntityType {
 	 *             if unable to get the object.
 	 */
 	@SuppressWarnings("rawtypes")
-	private static Object getPrivateStatic(Class clazz, String f)
-			throws Exception {
+	private static Object getPrivateStatic(Class clazz, String f) throws Exception {
 		Field field = clazz.getDeclaredField(f);
 		field.setAccessible(true);
 		return field.get(null);
@@ -199,16 +192,11 @@ public enum RideAbleEntityType {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static void a(Class paramClass, String paramString, int paramInt) {
 		try {
-			((Map) getPrivateStatic(EntityTypes.class, "c")).put(paramString,
-					paramClass);
-			((Map) getPrivateStatic(EntityTypes.class, "d")).put(paramClass,
-					paramString);
-			((Map) getPrivateStatic(EntityTypes.class, "e")).put(
-					Integer.valueOf(paramInt), paramClass);
-			((Map) getPrivateStatic(EntityTypes.class, "f")).put(paramClass,
-					Integer.valueOf(paramInt));
-			((Map) getPrivateStatic(EntityTypes.class, "g")).put(paramString,
-					Integer.valueOf(paramInt));
+			((Map) getPrivateStatic(EntityTypes.class, "c")).put(paramString, paramClass);
+			((Map) getPrivateStatic(EntityTypes.class, "d")).put(paramClass, paramString);
+			((Map) getPrivateStatic(EntityTypes.class, "e")).put(Integer.valueOf(paramInt), paramClass);
+			((Map) getPrivateStatic(EntityTypes.class, "f")).put(paramClass, Integer.valueOf(paramInt));
+			((Map) getPrivateStatic(EntityTypes.class, "g")).put(paramString, Integer.valueOf(paramInt));
 		} catch (Exception exc) {
 			// Unable to register the new class.
 		}

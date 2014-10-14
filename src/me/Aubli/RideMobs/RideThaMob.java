@@ -28,7 +28,6 @@ public class RideThaMob extends JavaPlugin {
 	public static boolean update;
 	public static File file;
 	public static boolean check_update;
-	private String version = "(MC: 1.7.9)";
 
 	public void onEnable() {
 		pl = this;
@@ -39,8 +38,7 @@ public class RideThaMob extends JavaPlugin {
 		registerCommands();
 
 		RideThaMob.prefix = ("[" + getDescription().getName() + "] ");
-		RideThaMob.cprefix = (ChatColor.AQUA + "[" + ChatColor.RED
-				+ getDescription().getName() + ChatColor.AQUA + "] " + ChatColor.RESET);
+		RideThaMob.cprefix = (ChatColor.AQUA + "[" + ChatColor.RED + getDescription().getName() + ChatColor.AQUA + "] " + ChatColor.RESET);
 
 		setupEntityBlacklist();
 
@@ -49,24 +47,12 @@ public class RideThaMob extends JavaPlugin {
 		RideThaMob.control = new ArrayList<String>();
 		RideThaMob.player = new ArrayList<String>();
 		RideThaMob.fly = new ArrayList<String>();
-
-		// if (Bukkit.getVersion().contains(version)) {
-		// RideAbleEntityType.registerEntities();
-		// } else {
+		
 		try {
 			RideAbleEntityType.registerEntities();
 		} catch (Exception ex) {
-			Bukkit.getConsoleSender()
-					.sendMessage(
-							ChatColor.YELLOW
-									+ "[RideThaMob] WARINING:"
-									+ ChatColor.RED
-									+ "Failed to register the custom Entitys! You cant control the Entitys with the wasd keys now! Please make sure your are running the right Bukkit version("
-									+ version
-									+ ") if you want to use the wasd mode!");
-			Bukkit.getConsoleSender().sendMessage(
-					ChatColor.YELLOW + "[RideThaMob] WARINING:" + ChatColor.RED
-							+ "You are running " + Bukkit.getVersion());
+			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[RideThaMob] WARNING:" + ChatColor.RED + "Failed to register the custom Entitys! You can't control the Entitys with the wasd keys now!");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "[RideThaMob] WARNING:" + ChatColor.RED + "You are running " + Bukkit.getVersion());
 		}
 
 		Filter filter = new ConsoleFilter();
@@ -101,8 +87,7 @@ public class RideThaMob extends JavaPlugin {
 	}
 
 	private void registerEvents() {
-		getServer().getPluginManager().registerEvents(new RideThaMobListener(),
-				pl);
+		getServer().getPluginManager().registerEvents(new RideThaMobListener(),	pl);
 	}
 
 	private void setupEntityBlacklist() {
