@@ -1,7 +1,7 @@
-name: RideThaMob
-author: MiniDigger
-version: ${project.version}
-main: de.MiniDigger.RideThaMob.RideThaMob
+name: RideMobs
+author: [MiniDigger, Aubli]
+version: 1.0
+main: me.Aubli.RideMobs.RideThaMob
 commands:
   RideThaMob:
       description: RideThaMob :D
