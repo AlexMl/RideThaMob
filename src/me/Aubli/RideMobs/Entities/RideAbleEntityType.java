@@ -1,52 +1,30 @@
 package me.Aubli.RideMobs.Entities;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import net.minecraft.server.v1_7_R4.BiomeBase;
 import net.minecraft.server.v1_7_R4.BiomeMeta;
-import net.minecraft.server.v1_7_R4.EntityChicken;
-import net.minecraft.server.v1_7_R4.EntityCow;
-import net.minecraft.server.v1_7_R4.EntityEnderDragon;
 import net.minecraft.server.v1_7_R4.EntityHorse;
 import net.minecraft.server.v1_7_R4.EntityInsentient;
-import net.minecraft.server.v1_7_R4.EntityIronGolem;
-import net.minecraft.server.v1_7_R4.EntityMushroomCow;
-import net.minecraft.server.v1_7_R4.EntityOcelot;
-import net.minecraft.server.v1_7_R4.EntityPig;
-import net.minecraft.server.v1_7_R4.EntitySheep;
-import net.minecraft.server.v1_7_R4.EntitySnowman;
 import net.minecraft.server.v1_7_R4.EntityTypes;
-import net.minecraft.server.v1_7_R4.EntityWolf;
 
 import org.bukkit.entity.EntityType;
 
 public enum RideAbleEntityType {	
-	CHICKEN("Chicken", 93, EntityType.CHICKEN, EntityChicken.class,	RideAbleChicken.class),
-	COW("Cow", 92, EntityType.COW, EntityCow.class, RideAbleCow.class),	
-	ENDER_DRAGON("Enderdragon", 63, EntityType.ENDER_DRAGON, EntityEnderDragon.class, RideAbleEnderDragon.class),
-	HORSE("Horse", 100, EntityType.HORSE, EntityHorse.class, RideAbleHorse.class),
-	IRON_GOLEM("Iron Golem", 99, EntityType.IRON_GOLEM, EntityIronGolem.class, RideAbleIronGolem.class),	
-	MUSHROOM_COW("Mushroom Cow", 96, EntityType.MUSHROOM_COW, EntityMushroomCow.class, RideAbleMushroomCow.class),
-	OCELOT("Ocelot", 98, EntityType.OCELOT, EntityOcelot.class, RideAbleOcelot.class),
-	PIG("Pig", 90, EntityType.PIG, EntityPig.class, RideAblePig.class),
-	SHEEP("Sheep", 91, EntityType.SHEEP, EntitySheep.class, RideAbleSheep.class),	
-	SNOW_MAN("Snowman", 97, EntityType.SNOWMAN, EntitySnowman.class,RideAbleSnowman.class), 	
-	WOLF("Wolf", 95, EntityType.WOLF, EntityWolf.class, RideAbleWolf.class),
-	;
+	HORSE("EntityHorse", 100, EntityType.HORSE, RideAbleHorse.class);
 	
 	private String name;
 	private int id;
 	private EntityType entityType;
-	private Class<? extends EntityInsentient> nmsClass;
 	private Class<? extends EntityInsentient> customClass;
 
-	private RideAbleEntityType(String name, int id, EntityType entityType, Class<? extends EntityInsentient> nmsClass, Class<? extends EntityInsentient> customClass) {
+	private RideAbleEntityType(String name, int id, EntityType entityType, Class<? extends EntityInsentient> customClass) {
 		this.name = name;
 		this.id = id;
 		this.entityType = entityType;
-		this.nmsClass = nmsClass;
 		this.customClass = customClass;
 	}
 
@@ -61,144 +39,73 @@ public enum RideAbleEntityType {
 	public EntityType getEntityType() {
 		return entityType;
 	}
-
-	public Class<? extends EntityInsentient> getNMSClass() {
-		return nmsClass;
-	}
-
+	
 	public Class<? extends EntityInsentient> getCustomClass() {
 		return customClass;
-	}
-
-	/**
-	 * Register our entities.
-	 */
-	public static void registerEntities() {
-		for (RideAbleEntityType entity : values())
-			a(entity.getCustomClass(), entity.getName(), entity.getID());
-
-		// BiomeBase#biomes became private.
-		BiomeBase[] biomes;
-		try {
-			biomes = (BiomeBase[]) getPrivateStatic(BiomeBase.class, "biomes");
-		} catch (Exception exc) {
-			// Unable to fetch.
-			return;
+	}	
+	
+	@SuppressWarnings("unchecked")
+    public static void registerEntity(String name, int id, Class<? extends EntityInsentient> customClass) {
+    	try {
+    		System.out.println("r: " + name + " ," + id + " ," + customClass);
+    		List<Map<?, ?>> dataMaps = new ArrayList<Map<?, ?>>();
+    		for (Field f : EntityTypes.class.getDeclaredFields()) {
+    			if (f.getType().getSimpleName().equals(Map.class.getSimpleName())) {
+    				f.setAccessible(true);
+    				dataMaps.add((Map<?, ?>) f.get(null));
+    			}
+    		}
+    
+    		((Map<Class<? extends EntityInsentient>, String>) dataMaps.get(1)).put(customClass, name);
+    		((Map<Class<? extends EntityInsentient>, Integer>) dataMaps.get(3)).put(customClass, id);
+    
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void registerHorse(){	
+		try{			
+			((Map) getPrivateStatic(EntityTypes.class, "c")).put(HORSE.getName(), HORSE.getCustomClass());
+			((Map) getPrivateStatic(EntityTypes.class, "d")).put(HORSE.getCustomClass(),HORSE.getName());
+			((Map) getPrivateStatic(EntityTypes.class, "e")).put(Integer.valueOf(HORSE.getID()), HORSE.getCustomClass());
+			((Map) getPrivateStatic(EntityTypes.class, "f")).put(HORSE.getCustomClass(),Integer.valueOf(HORSE.getID()));
+			((Map) getPrivateStatic(EntityTypes.class, "g")).put(HORSE.getName(),Integer.valueOf(HORSE.getID()));			
+		}catch (Exception e){
+			e.printStackTrace();
 		}
-		for (BiomeBase biomeBase : biomes) {
-			if (biomeBase == null)
+	     
+		for (BiomeBase biomeBase : BiomeBase.getBiomes()){
+			if (biomeBase == null){
 				break;
-
-			// This changed names from J, K, L and M.
-			for (String field : new String[] { "as", "at", "au", "av" })
-				try {
+			}
+	         
+			for (String field : new String[]{"as", "at", "au", "av"}){
+				try{
 					Field list = BiomeBase.class.getDeclaredField(field);
 					list.setAccessible(true);
-					@SuppressWarnings("unchecked")
+			
 					List<BiomeMeta> mobList = (List<BiomeMeta>) list.get(biomeBase);
-
-					// Write in our custom class.
-					for (BiomeMeta meta : mobList)
-						for (RideAbleEntityType entity : values())
-							if (entity.getNMSClass().equals(meta.b))
-								meta.b = entity.getCustomClass();
-				} catch (Exception e) {
+					
+					for (BiomeMeta meta : mobList){						
+						if (EntityHorse.class.equals(meta.b)){
+							meta.b = HORSE.getCustomClass();
+						}
+					}
+				}catch (Exception e){
 					e.printStackTrace();
 				}
+			}
 		}
 	}
 
-	/**
-	 * Unregister our entities to prevent memory leaks. Call on disable.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static void unregisterEntities() {
-		for (RideAbleEntityType entity : values()) {
-			// Remove our class references.
-			try {
-				((Map) getPrivateStatic(EntityTypes.class, "d")).remove(entity.getCustomClass());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			try {
-				((Map) getPrivateStatic(EntityTypes.class, "f")).remove(entity.getCustomClass());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		for (RideAbleEntityType entity : values())
-			try {
-				// Unregister each entity by writing the NMS back in place of the custom class.
-				a(entity.getNMSClass(), entity.getName(), entity.getID());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		// Biomes#biomes was made private so use reflection to get it.
-		BiomeBase[] biomes;
-		try {
-			biomes = (BiomeBase[]) getPrivateStatic(BiomeBase.class, "biomes");
-		} catch (Exception exc) {
-			// Unable to fetch.
-			return;
-		}
-		for (BiomeBase biomeBase : biomes) {
-			if (biomeBase == null)
-				break;
-
-			// The list fields changed names but update the meta regardless.
-			for (String field : new String[] { "as", "at", "au", "av" })
-				try {
-					Field list = BiomeBase.class.getDeclaredField(field);
-					list.setAccessible(true);
-					@SuppressWarnings("unchecked")
-					List<BiomeMeta> mobList = (List<BiomeMeta>) list.get(biomeBase);
-
-					// Make sure the NMS class is written back over our custom class.
-					for (BiomeMeta meta : mobList)
-						for (RideAbleEntityType entity : values())
-							if (entity.getCustomClass().equals(meta.b))
-								meta.b = entity.getNMSClass();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-		}
-	}
-
-	/**
-	 * A convenience method.
-	 * 
-	 * @param clazz
-	 *            The class.
-	 * @param f
-	 *            The string representation of the private static field.
-	 * @return The object found
-	 * @throws Exception
-	 *             if unable to get the object.
-	 */
+	
 	@SuppressWarnings("rawtypes")
 	private static Object getPrivateStatic(Class clazz, String f) throws Exception {
 		Field field = clazz.getDeclaredField(f);
 		field.setAccessible(true);
 		return field.get(null);
 	}
-
-	/*
-	 * Since 1.7.2 added a check in their entity registration, simply bypass it
-	 * and write to the maps ourself.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static void a(Class paramClass, String paramString, int paramInt) {
-		try {
-			((Map) getPrivateStatic(EntityTypes.class, "c")).put(paramString, paramClass);
-			((Map) getPrivateStatic(EntityTypes.class, "d")).put(paramClass, paramString);
-			((Map) getPrivateStatic(EntityTypes.class, "e")).put(Integer.valueOf(paramInt), paramClass);
-			((Map) getPrivateStatic(EntityTypes.class, "f")).put(paramClass, Integer.valueOf(paramInt));
-			((Map) getPrivateStatic(EntityTypes.class, "g")).put(paramString, Integer.valueOf(paramInt));
-		} catch (Exception exc) {
-			// Unable to register the new class.
-		}
-	}
+	
 }
