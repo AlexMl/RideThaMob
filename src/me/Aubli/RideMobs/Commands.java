@@ -1,99 +1,72 @@
 package me.Aubli.RideMobs;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class Commands implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		if (cmd.getName().equalsIgnoreCase("ridethamob")) {
-			if ((sender instanceof Player)) {
-				Player p = (Player) sender;
-				if (args.length == 1) {
-					
-					if (args[0].equalsIgnoreCase("speed")) {// Speed Command
-						if (!p.hasPermission("ridethamob.speed")) {
-							p.sendMessage(RideThaMob.cprefix + Lang._(LangType.SPEEDMODE_NO_PERM));
-							return true;
-						}
-						
-						if (!RideThaMob.speed.contains(p.getName())) {
-							p.sendMessage(RideThaMob.cprefix + Lang._(LangType.SPEEDMODE_ACTIVATED));
-							RideThaMob.speed.add(p.getName());
-						} else {
-							p.sendMessage(RideThaMob.cprefix + Lang._(LangType.SPEEDMODE_DEACTIVATED));
-							RideThaMob.speed.remove(p.getName());
-						}
-					} else if (args[0].equalsIgnoreCase("reload")) { // Reload Command
-						if (p.hasPermission("ridethamob.reload")) {
-							RideThaMob.pl.reloadConfig();
-							RideThaMob.pl.loadConfig();
-							new Lang();
-							p.sendMessage(RideThaMob.cprefix + Lang._(LangType.CONFIG_RELOADED));
-						} else {
-							p.sendMessage(RideThaMob.cprefix + Lang._(LangType.NO_PERM));
-							return true;
-						}
-
-					} else if (args[0].equalsIgnoreCase("control")) {// Control Command
-						if (p.hasPermission("ridethamob.control")) {
-							if (!RideThaMob.control.contains(p.getName())) {
-								p.sendMessage(RideThaMob.cprefix + Lang._(LangType.CONTROLMODE_ACTIVATED));
-								RideThaMob.control.add(p.getName());
-							} else {
-								p.sendMessage(RideThaMob.cprefix + Lang._(LangType.CONTROLMODE_DEACTIVATED));
-								RideThaMob.control.remove(p.getName());
-							}
-						} else {
-							p.sendMessage(RideThaMob.cprefix + Lang._(LangType.CONTROLMODE_NO_PERM));
-						}
-					} else if (args[0].equalsIgnoreCase("nyan")) {// Nyan Command
-						if (p.hasPermission("ridethamob.nyan")) {
-							if (p.isInsideVehicle() && p.getVehicle().getType() == EntityType.SHEEP) {
-								NyanTask task = new NyanTask(RideThaMob.pl);
-								task.start(p);
-							} else {
-								p.sendMessage(RideThaMob.cprefix + Lang._(LangType.NYAN_NO_SHEEP));
-							}
-						} else {
-							p.sendMessage(RideThaMob.cprefix + Lang._(LangType.NYAN_NO_PERM));
-						}
-					} else if (args[0].equalsIgnoreCase("fly")) {// Fly command
-						if (p.hasPermission("ridethamob.fly")) {
-							if (!RideThaMob.fly.contains(p.getName())) {
-								p.sendMessage(RideThaMob.cprefix + Lang._(LangType.FLYMODE_ACTIVATED));
-								RideThaMob.fly.add(p.getName());
-							} else {
-								p.sendMessage(RideThaMob.cprefix + Lang._(LangType.FLYMODE_DEACTIVATED));
-								RideThaMob.fly.remove(p.getName());
-							}
-						} else {
-							p.sendMessage(RideThaMob.cprefix + Lang._(LangType.NO_PERM));
-						}
-					} else {
-						// command not found
-						p.sendMessage(RideThaMob.cprefix + Lang._(LangType.COMMAND_NOT_FOUND));
-						return true;
-					}
-				} else if (args.length==0){
-					// aufsteigen
-					if (p.getVehicle() == null) {
-						RideThaMobListener.checkNearRideable(p);
-					} else {// Aussteigen
-						RideThaMob.player.remove(p.getName());
-						p.getVehicle().eject();
-						p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE_HOP_OFF));
-					}
+		if(!(sender instanceof Player)) {
+			sender.sendMessage("Only for Players!");
+			return true;
+		}
+		
+		Player playerSender = (Player)sender;
+		
+		if(cmd.getName().equalsIgnoreCase("horsefly")) {
+			
+			if(args.length==0) {
+				if(!RideThaMob.enableHorseFlying.containsKey(playerSender.getUniqueId())) {
+					RideThaMob.enableHorseFlying.put(playerSender.getUniqueId(), false);
+					playerSender.sendMessage(RideThaMob.getPrefix() + "Fliegen ist für dich nun deaktiviert!");
 					return true;
 				}else {
-					p.sendMessage(RideThaMob.cprefix + Lang._(LangType.TOO_MANY_ARGS));
-					return true;
+					if(!RideThaMob.enableHorseFlying.get(playerSender.getUniqueId())) {
+						RideThaMob.enableHorseFlying.put(playerSender.getUniqueId(), true);
+						playerSender.sendMessage(RideThaMob.getPrefix() + "Fliegen ist für dich aktiviert!");
+						return true;
+					}else {
+						RideThaMob.enableHorseFlying.put(playerSender.getUniqueId(), false);
+						playerSender.sendMessage(RideThaMob.getPrefix() + "Fliegen ist für dich nun deaktiviert!");
+						return true;
+					}
+				}
+			}else if(args.length==1) {
+				if(args[0].equalsIgnoreCase("all")) {
+					if(playerSender.hasPermission("horsefly.admin")) {
+						
+						if(RideThaMob.global) {
+							for(Player p : Bukkit.getOnlinePlayers()) {
+								RideThaMob.enableHorseFlying.put(p.getUniqueId(), false);
+								p.sendMessage(RideThaMob.getPrefix() + "Fliegen ist für dich nun deaktiviert!");
+							}
+							
+							RideThaMob.global = false;
+							playerSender.sendMessage(RideThaMob.getPrefix() + "Fliegen global deaktiviert!");
+							return true;
+						}else {
+							for(Player p : Bukkit.getOnlinePlayers()) {
+								RideThaMob.enableHorseFlying.put(p.getUniqueId(), true);
+								p.sendMessage(RideThaMob.getPrefix() + "Fliegen ist für dich nun aktiviert!");
+							}
+							
+							RideThaMob.global = true;
+							playerSender.sendMessage(RideThaMob.getPrefix() + "Fliegen global aktiviert!");
+							return true;
+						}
+					}else {
+						playerSender.sendMessage(ChatColor.DARK_RED + "Du hast nicht die nötigen Rechte!");
+						return true;
+					}
 				}
 			}
+			
+			
 		}
 		return true;
 	}
