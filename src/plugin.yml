@@ -1,9 +1,9 @@
-name: RideMobs
+name: HorseFly
 author: [MiniDigger, Aubli]
 version: 1.0
 main: me.Aubli.RideMobs.RideThaMob
 
 commands:
     horsefly:
-        usage: /<command>
+        usage: /<command> [all]
         description: Toggles Horse flying

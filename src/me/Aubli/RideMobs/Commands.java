@@ -28,7 +28,7 @@ public class Commands implements CommandExecutor {
 				}else {
 					if(!RideThaMob.enableHorseFlying.get(playerSender.getUniqueId())) {
 						RideThaMob.enableHorseFlying.put(playerSender.getUniqueId(), true);
-						playerSender.sendMessage(RideThaMob.getPrefix() + "Fliegen ist für dich aktiviert!");
+						playerSender.sendMessage(RideThaMob.getPrefix() + "Fliegen ist für dich nun aktiviert!");
 						return true;
 					}else {
 						RideThaMob.enableHorseFlying.put(playerSender.getUniqueId(), false);

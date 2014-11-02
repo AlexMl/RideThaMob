@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -17,6 +18,14 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.util.Vector;
 
 public class RideThaMobListener implements Listener {	
+	
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		Player eventPlayer = event.getPlayer();
+		RideThaMob.enableHorseFlying.put(eventPlayer.getUniqueId(), true);
+		eventPlayer.sendMessage(RideThaMob.getPrefix() + "Fliegen ist für dich nun aktiviert!");
+	}
+	
 	
 	@EventHandler
 	public void onVehicleEnter(VehicleEnterEvent event) {
