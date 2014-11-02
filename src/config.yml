@@ -1,5 +1,0 @@
-defaultspeed: 1.0 # normal speed default: 1.0
-maxspeed: 1.5 # speedmode speed default: 1.5
-nyan_change_speed: 20 # how fast the color should change in ticks (20 ticks = 1 sec)
-entity_check_radius: 10 # the radius it look for entitys to ride
-check_for_updates: true
