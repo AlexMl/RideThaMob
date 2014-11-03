@@ -16,8 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class RideThaMob extends JavaPlugin {
 	
-	public static double defaultspeed;
-	public static double maxspeed;
+	public static double defaultspeed = 1.5;
 	
 	public static ArrayList<EntityType> allowedTypes;
 	public static ArrayList<String> player;
