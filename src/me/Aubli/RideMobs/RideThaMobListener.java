@@ -98,7 +98,7 @@ public class RideThaMobListener implements Listener {
 				Entity vehicle = p.getVehicle();
 				Vector forward = p.getEyeLocation().getDirection().multiply(d);	
 					
-				//	System.out.println(forward);
+				//System.out.println(forward);
 					
 				vehicle.setVelocity(forward);
 				p.setFallDistance(0.0F);
@@ -109,23 +109,17 @@ public class RideThaMobListener implements Listener {
 		
 	}
 	
-	public static void ride(Player p, Entity e) {
+	private static void ride(Player p, Entity e) {
 		if (e instanceof Creature) {
 			((Creature) e).setTarget(null);
-		}
-		if(RideThaMob.allowedTypes.contains(e.getType())) {
-
-			if(e.getType() == EntityType.HORSE) {
-				Horse h = (Horse)e;
-				if(h.getStyle()==Style.WHITE) {
-					RideThaMob.player.add(p.getName());
-					h.setTamed(true);
-					h.setOwner(p);	
-					return;
-				}else {
-					return;
-				}
-			
+		}		
+		if(e.getType() == EntityType.HORSE) {
+			Horse h = (Horse)e;
+			if(h.getStyle()==Style.WHITE) {
+				RideThaMob.player.add(p.getName());
+				h.setTamed(true);
+				h.setOwner(p);	
+				return;			
 			}
 		}
 	}
